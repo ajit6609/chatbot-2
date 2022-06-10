@@ -1,0 +1,31 @@
+.messages {
+  padding: 2% 5%;
+}
+
+.messages__user {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.messages__bot {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.messages__text-user {
+  padding: 1rem 1rem;
+  background-color: rgb(159, 76, 236);
+  border-top-left-radius: 0.8rem;
+  border-top-right-radius: 0.8rem;
+  border-bottom-left-radius: 0.8rem;
+  margin: 0;
+}
+
+.messages__text-bot {
+  padding: 1rem 1rem;
+  background-color: rgb(187, 173, 200);
+  border-top-left-radius: 0.8rem;
+  border-top-right-radius: 0.8rem;
+  border-bottom-right-radius: 0.8rem;
+  margin: 0;
+}
