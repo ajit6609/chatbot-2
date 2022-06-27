@@ -2,22 +2,15 @@ import React, { useState } from "react";
 import classes from "./Chatbot.module.css";
 import { MdSend, MdOutlineClose } from "react-icons/md";
 import Messages from "./Messages";
+import { useDispatch } from "react-redux";
+import * as chatbotActions from "../store/actions/chatbotActions";
 
 const Chatbot = () => {
-  const [messages, setMessages] = useState([]);
   const [query, setQuery] = useState("");
 
-  const textQuery = (text) => {
-    const response = {
-      speak: "bot",
-      text: text,
-    };
-    forwardMessage(response);
-    console.log("response", response);
-  };
+  const dispatch = useDispatch();
 
   const handleUserQuery = () => {
-    console.log("query", query);
     if (query === "") {
       alert("please enter a valid query");
       return;
@@ -26,18 +19,9 @@ const Chatbot = () => {
       speak: "user",
       text: query,
     };
-    forwardMessage(data);
-    textQuery(query);
+
+    dispatch(chatbotActions.textQueryAction(data));
     setQuery("");
-  };
-
-  const forwardMessage = (data) => {
-    console.log("data", data);
-    let message = data;
-
-    setMessages((prev) => {
-      return [...prev, message];
-    });
   };
 
   const queryChangeHandler = (event) => {
@@ -54,7 +38,7 @@ const Chatbot = () => {
       </div>
 
       <div className={classes.chatbot__body}>
-        <Messages messages={messages} />
+        <Messages />
       </div>
       <div className={classes.chatbot__footer}>
         <input

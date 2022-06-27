@@ -1,7 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import classes from "./Messages.module.css";
+import reactStringReplace from "react-string-replace";
+import { useSelector } from "react-redux";
 
 const Messages = (props) => {
+  // const [buttonText, setbuttonText] = useState(false);
+
+  const messages = useSelector((state) => state.chatbot.messages);
+
   const displayMessage = (message, index) => {
     if (message.speak === "user") {
       return (
@@ -10,9 +16,29 @@ const Messages = (props) => {
         </div>
       );
     } else if (message.speak === "bot") {
+      let dsptext = message.text;
+
+      if (message.entities) {
+        message.entities.map((entity) => {
+          if (message.text.toLowerCase().includes(entity.value.toLowerCase())) {
+            dsptext = reactStringReplace(dsptext, entity.value, (match, i) => (
+              <span key={i} className={classes.rpltext}>
+                {match}
+                <span className={classes.entitytype}>
+                  {entity.type}
+                  <button className={classes.entityButton}>x</button>
+                </span>
+              </span>
+            ));
+            console.log(dsptext);
+          }
+          return;
+        });
+      }
+
       return (
         <div key={index} className={classes.messages__bot}>
-          <p className={classes["messages__text-bot"]}>{message.text}</p>
+          <p className={classes["messages__text-bot"]}>{dsptext}</p>
         </div>
       );
     }
@@ -20,7 +46,7 @@ const Messages = (props) => {
 
   return (
     <div className={classes.messages}>
-      {props.messages.map((message, index) => {
+      {messages.map((message, index) => {
         return displayMessage(message, index);
       })}
     </div>
