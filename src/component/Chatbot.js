@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import classes from "./Chatbot.module.css";
 import { MdSend, MdOutlineClose } from "react-icons/md";
 import Messages from "./Messages";
+import Test from "./Test";
 import { useDispatch } from "react-redux";
 import * as chatbotActions from "../store/actions/chatbotActions";
 
@@ -38,7 +39,7 @@ const Chatbot = () => {
       </div>
 
       <div className={classes.chatbot__body}>
-        <Messages />
+        <Test />
       </div>
       <div className={classes.chatbot__footer}>
         <input
