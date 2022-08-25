@@ -39,7 +39,7 @@ const Chatbot = () => {
       </div>
 
       <div className={classes.chatbot__body}>
-        <Test />
+        <Messages />
       </div>
       <div className={classes.chatbot__footer}>
         <input

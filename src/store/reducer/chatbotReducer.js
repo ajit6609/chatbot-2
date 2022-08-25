@@ -10,8 +10,9 @@ const store = (state = initialState, action) => {
       let message = action.data;
 
       return {
-        ...state,
-        messages: [...state.messages, message],
+        // ...state,
+        // messages: [...state.messages, message],
+        messages: [message],
       };
 
     case UPDATE_USER_MESSAGE:
@@ -20,6 +21,7 @@ const store = (state = initialState, action) => {
       return {
         ...state,
         messages: [...state.messages, messageUser],
+        // messages: [messageUser],
       };
 
     default:

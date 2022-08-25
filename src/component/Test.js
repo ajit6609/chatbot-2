@@ -1,73 +1,71 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import classes from "./Messages.module.css";
 import reactStringReplace from "react-string-replace";
 import { useSelector } from "react-redux";
-import { notInitialized } from "react-redux/es/utils/useSyncExternalStore";
 
 const Messages = (props) => {
   const messages = useSelector((state) => state.chatbot.messages);
-  const [activeBot, setBot] = useState("");
-  const [dspText, updateDsptext] = useState([1, 2]);
+  const [activeBot, setBot] = useState([]);
 
-  // let dsptext;
-  // let botMsg;
-  // const displayMessage = useCallback(() => {
-  //   updateDsptext(() => {
-  //     return dsptext;
-  //   });
-  //   console.log(dspText);
+  const isFirstRun = useRef(true);
 
-  //   dsptext = botMsg;
+  useEffect(() => {
+    console.log(messages);
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+    } else if (messages[1].speak === "bot") {
+      setBot(messages[1].text);
+      console.log(activeBot);
+    }
+  }, [messages, activeBot]);
 
-  // function removespan(entity) {
-  //   console.log(dsptext);
-  //   // updateDsptext(message.text);
-  //   // console.log(dspText);
-  //   for (let i = 0; i < dsptext.length; i++) {
-  //     if (
-  //       dsptext[i].type === "span" &&
-  //       dsptext[i].props.children[0] === entity.match
-  //     ) {
-  //       dsptext[i] = entity.match;
-  //     }
-  //   }
-  //   console.log(dsptext);
-  // }
+  let dsptext;
 
-  // if (message.entities) {
-  //   message.entities.forEach((entity) => {
-  //     if (message.text.toLowerCase().includes(entity.value.toLowerCase())) {
-  //       dsptext = reactStringReplace(dsptext, entity.value, (match) => (
-  //         <span className={classes.rpltext}>
-  //           {match}
-  //           <span className={classes.entitytype}>
-  //             {entity.type}
-  //             <button
-  //               className={classes.entityButton}
-  //               onClick={() => removespan({ match })}
-  //             >
-  //               x
-  //             </button>
-  //           </span>
-  //         </span>
-  //       ));
-  //       console.log(dsptext);
-  //     }
-  // }
-  //   );
-  // }
+  const displayMessage = (index, message) => {
+    dsptext = message.text;
 
-  // return (
-  //   <div key={index} className={classes.messages__bot}>
-  //     <p className={classes["messages__text-bot"]}>{dsptext}</p>
-  //   </div>
-  // );
-  // }, [dspText, dsptext, botMsg]);
-  // useEffect(() => {
-  //   activeBot.speak === "bot"
-  //     ? updateDsptext([1, 2, 3])
-  //     : console.log(activeBot);
-  // }, [activeBot]);
+    function removespan(entity) {
+      console.log(dsptext);
+
+      for (let i = 0; i < dsptext.length; i++) {
+        if (
+          dsptext[i].type === "span" &&
+          dsptext[i].props.children[0] === entity.match
+        ) {
+          dsptext[i] = entity.match;
+        }
+      }
+      console.log(dsptext);
+    }
+
+    if (message.entities) {
+      message.entities.forEach((entity) => {
+        if (message.text.toLowerCase().includes(entity.value.toLowerCase())) {
+          dsptext = reactStringReplace(dsptext, entity.value, (match) => (
+            <span className={classes.rpltext}>
+              {match}
+              <span className={classes.entitytype}>
+                {entity.type}
+                <button
+                  className={classes.entityButton}
+                  onClick={() => removespan({ match })}
+                >
+                  x
+                </button>
+              </span>
+            </span>
+          ));
+          console.log(dsptext);
+        }
+      });
+    }
+
+    return (
+      <div key={index} className={classes.messages__bot}>
+        <p className={classes["messages__text-bot"]}>{dsptext}</p>
+      </div>
+    );
+  };
 
   return (
     <div className={classes.messages}>
@@ -81,8 +79,7 @@ const Messages = (props) => {
             </div>
           );
         } else if (message.speak === "bot") {
-          message.speak === "bot" ? setBot(message) : console.log(message);
-          return "";
+          return displayMessage(index, message);
         } else return "";
       })}
     </div>

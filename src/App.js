@@ -1,11 +1,11 @@
 import "./App.css";
-import Chatbot from "./component/Chatbot";
+import Feature from "./component/new_chatbot/Feature";
+// import Chatbot from "./component/Chatbot";
 
 function App() {
   return (
     <div>
-      <h1>The Chatbot App</h1>
-      <Chatbot />
+      <Feature />
     </div>
   );
 }

@@ -5,82 +5,79 @@ import { useSelector } from "react-redux";
 
 const Messages = (props) => {
   const messages = useSelector((state) => state.chatbot.messages);
+  const [dspText, updateDsptext] = useState(messages[1].text);
+  ///here we are assuming that messages[1].text is bot reply
 
-  const [dspText, updateDsptext] = useState([]);
+  const displayMessage = (message, index) => {
+    // console.log(message);
+    if (message.speak === "user") {
+      console.log(index);
 
-  const displayMessage = useCallback(
-    (message, index) => {
-      console.log(message);
-      if (message.speak === "user") {
-        console.log(index);
+      return (
+        <div key={index} className={classes.messages__user}>
+          <p className={classes["messages__text-user"]}>{message.text}</p>
+        </div>
+      );
+    } else if (message.speak === "bot") {
+      console.log(index);
+      // updateDsptext(message.text);
+      // console.log(dspText);
 
-        return (
-          <div key={index} className={classes.messages__user}>
-            <p className={classes["messages__text-user"]}>{message.text}</p>
-          </div>
-        );
-      } else if (message.speak === "bot") {
-        console.log(index);
+      let dsptext = message.text;
 
-        let dsptext = message.text;
+      function removespan(entity) {
+        // const theSpan = document.getElementById("test");
+        // console.log(theSpan.innerHTML);
+        // theSpan.getParent().removeChild(theSpan);
 
-        function removespan(entity) {
-          // const theSpan = document.getElementById("test");
-          // console.log(theSpan.innerHTML);
-          // theSpan.getParent().removeChild(theSpan);
-          console.log(dsptext);
-          updateDsptext(message.text);
-          console.log(dspText);
-          for (let i = 0; i < dsptext.length; i++) {
-            if (
-              dsptext[i].type === "span" &&
-              dsptext[i].props.children[0] === entity.match
-            ) {
-              dsptext[i] = entity.match;
-            }
+        updateDsptext("hehe");
+        console.log(dspText);
+        for (let i = 0; i < dspText.length; i++) {
+          if (
+            dspText[i].type === "span" &&
+            dspText[i].props.children[0] === entity.match
+          ) {
+            dspText[i] = entity.match;
           }
-          console.log(dsptext);
-          // const i = dsptext.indexOf(theSpan);
-          // console.log("index is=", i);
         }
-
-        if (message.entities) {
-          message.entities.forEach((entity) => {
-            if (
-              message.text.toLowerCase().includes(entity.value.toLowerCase())
-            ) {
-              dsptext = reactStringReplace(dsptext, entity.value, (match) => (
-                <span className={classes.rpltext}>
-                  {match}
-                  <span className={classes.entitytype}>
-                    {entity.type}
-                    <button
-                      className={classes.entityButton}
-                      onClick={() => removespan({ match })}
-                    >
-                      x
-                    </button>
-                  </span>
-                </span>
-              ));
-              // console.log(dsptext);
-            }
-          });
-        }
-
-        return (
-          <div key={index} className={classes.messages__bot}>
-            <p className={classes["messages__text-bot"]}>{dsptext}</p>
-          </div>
-        );
+        console.log(dspText);
+        // const i = dsptext.indexOf(theSpan);
+        // console.log("index is=", i);
       }
-    },
-    [dspText]
-  );
 
-  useEffect(() => {
-    displayMessage();
-  }, [dspText, displayMessage]);
+      if (message.entities) {
+        message.entities.forEach((entity) => {
+          if (message.text.toLowerCase().includes(entity.value.toLowerCase())) {
+            dspText = reactStringReplace(dspText, entity.value, (match) => (
+              <span className={classes.rpltext}>
+                {match}
+                <span className={classes.entitytype}>
+                  {entity.type}
+                  <button
+                    className={classes.entityButton}
+                    onClick={() => removespan({ match })}
+                  >
+                    x
+                  </button>
+                </span>
+              </span>
+            ));
+          }
+        });
+      }
+
+      return (
+        <div key={index} className={classes.messages__bot}>
+          {/* <p className={classes["messages__text-bot"]}>{dsptext}</p> */}
+          <p className={classes["messages__text-bot"]}>{dspText}</p>
+        </div>
+      );
+    }
+  };
+
+  // useEffect(() => {
+  //   displayMessage();
+  // }, [dspText, displayMessage]);
 
   return (
     <div className={classes.messages}>

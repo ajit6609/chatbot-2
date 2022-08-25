@@ -5,7 +5,13 @@
       "reply": "Hello Ajit!!!",
       "metadata": {
         "intent": "greeting",
-        "entities": []
+        "entities": [
+          {
+            "value": "Ajit",
+
+            "type": "person-name"
+          }
+        ]
       }
     },
     {
@@ -13,15 +19,27 @@
       "reply": "I am good , How are you?",
       "metadata": {
         "intent": "greeting",
-        "entities": []
+        "entities": [
+          {
+            "value": "good",
+
+            "type": "condition"
+          }
+        ]
       }
     },
     {
       "user_msg": "React",
       "reply": "React is a JS library!!",
       "metadata": {
-        "intent": "information",
-        "entities": []
+        "intent": "order-pizza",
+        "entities": [
+          {
+            "value": "react",
+
+            "type": "js library"
+          }
+        ]
       }
     },
     {

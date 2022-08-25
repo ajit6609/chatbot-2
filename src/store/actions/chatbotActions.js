@@ -8,7 +8,7 @@ export const textQueryAction = (data) => {
 
     const res = Reply.res.filter((reply) => reply.user_msg === data.text);
     let meta = null;
-    if (res[0].metadata.intent === "order-pizza") {
+    if (res[0].metadata.intent) {
       meta = res[0].metadata.entities;
     }
 
